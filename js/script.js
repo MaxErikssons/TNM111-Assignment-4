@@ -66,12 +66,26 @@ function render() {
   const height = 600;
 
   // Create a force simulation to determine the position of the nodes
-  const simulation = d3
-    .forceSimulation()
+  var linkForce = d3.forceLink(links).distance(20);
+  var forceBody = d3.forceManyBody().strength(-80);
+
+ var simulation = d3.forceSimulation()
     .nodes(nodes)
-    .force('charge', d3.forceManyBody().strength(-100))
+    .force('charge', forceBody)
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('link', d3.forceLink(links).distance(20));
+    .force('link', linkForce);
+
+    d3.select('#linkSlider').on('input', function() {
+      var distance = +this.value; // get the slider value as a number
+      linkForce.distance(distance); // update the link distance
+      simulation.alpha(1).restart(); // restart the simulation
+  });
+
+  d3.select('#forceSlider').on('input', function(){
+    var force = +this.value; // get the slider value as a number
+    forceBody.strength(force); // update the link distance
+      simulation.alpha(1).restart(); // restart the simulation
+  });
 
   // Create a svg element to hold the diagram
   const svg = d3
@@ -99,7 +113,7 @@ function render() {
     .enter()
     .append('circle')
     .attr('class', 'node')
-    .attr('r', 5)
+    .attr('r', (d) => (d.value)/10)
     .style('fill', (d) => d.colour)
     .call(
       d3
