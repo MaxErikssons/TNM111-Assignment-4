@@ -125,11 +125,22 @@ function render() {
     .data(nodes)
     .enter()
     .append('text')
-    .attr('class', 'label')
     .text((d) => d.name)
-    .attr('x', (d) => d.x)
-    .attr('y', (d) => d.y)
+    .attr('x', (d) => d.fx)
+    .attr('y', (d) => d.fy)
     .style('font-size', '10px');
+
+  console.log(nodes);
+  node.on('mouseover', (event, d) => {
+    const infoBox = d3.select('#infoBox'); // Select the HTML element for the information box
+    infoBox
+      .html(`<p>Name: ${d.name}</p><p>Value: ${d.value}</p>`) // Update the contents with the name and value of d
+      .style('visibility', 'visible'); // Make the information box visible
+  });
+
+  node.on('mouseout', (event, d) => {
+    d3.select('#infoBox').style('visibility', 'hidden'); // Hide the information box
+  });
 
   // Create a force simulation to determine the position of the nodes
   var linkForce = d3.forceLink(links).distance(20);
@@ -143,7 +154,6 @@ function render() {
     .force('link', linkForce);
 
   simulations.push(simulation);
-  console.log(simulations);
   linkForces.push(linkForce);
   forceBodies.push(forceBody);
 
