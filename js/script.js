@@ -1,4 +1,7 @@
 let data;
+let simulations = [];
+let linkForces = [];
+let forceBodies = [];
 
 function fetchData() {
   // Get all the checkbox elements with class "episode"
@@ -65,28 +68,6 @@ function render() {
   const width = 600;
   const height = 600;
 
-  // Create a force simulation to determine the position of the nodes
-  var linkForce = d3.forceLink(links).distance(20);
-  var forceBody = d3.forceManyBody().strength(-80);
-
- var simulation = d3.forceSimulation()
-    .nodes(nodes)
-    .force('charge', forceBody)
-    .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('link', linkForce);
-
-    d3.select('#linkSlider').on('input', function() {
-      var distance = +this.value; // get the slider value as a number
-      linkForce.distance(distance); // update the link distance
-      simulation.alpha(1).restart(); // restart the simulation
-  });
-
-  d3.select('#forceSlider').on('input', function(){
-    var force = +this.value; // get the slider value as a number
-    forceBody.strength(force); // update the link distance
-      simulation.alpha(1).restart(); // restart the simulation
-  });
-
   // Create a svg element to hold the diagram
   const svg = d3
     .select('body')
@@ -113,7 +94,7 @@ function render() {
     .enter()
     .append('circle')
     .attr('class', 'node')
-    .attr('r', (d) => (d.value)/10)
+    .attr('r', (d) => d.value / 10)
     .style('fill', (d) => d.colour)
     .call(
       d3
@@ -150,9 +131,48 @@ function render() {
     .attr('y', (d) => d.y)
     .style('font-size', '10px');
 
+  // Create a force simulation to determine the position of the nodes
+  var linkForce = d3.forceLink(links).distance(20);
+  var forceBody = d3.forceManyBody().strength(-80);
+
+  var simulation = d3
+    .forceSimulation()
+    .nodes(nodes)
+    .force('charge', forceBody)
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('link', linkForce);
+
+  simulations.push(simulation);
+  console.log(simulations);
+  linkForces.push(linkForce);
+  forceBodies.push(forceBody);
+
   // Start the simulation
   simulation.nodes(nodes).on('tick', ticked);
   simulation.force('link').links(links);
+
+  d3.select('#linkSlider').on('input', function () {
+    var distance = +this.value; // get the slider value as a number
+    linkForces.forEach(function (linkForce) {
+      linkForce.distance(distance); // update the link distance
+    });
+
+    simulations.forEach(function (simulation) {
+      console.log(simulations);
+      simulation.alpha(1).restart(); // restart the simulation
+    });
+  });
+
+  d3.select('#forceSlider').on('input', function () {
+    var force = +this.value; // get the slider value as a number
+    forceBodies.forEach(function (forceBody) {
+      forceBody.strength(force); // update the link distance
+    });
+
+    simulations.forEach(function (simulation) {
+      simulation.alpha(1).restart(); // restart the simulation
+    });
+  });
 
   function ticked() {
     link
