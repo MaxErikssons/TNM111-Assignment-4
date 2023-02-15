@@ -93,10 +93,13 @@ function render() {
     .attr('width', width)
     .attr('height', height)
     .style('display', 'inline-block')
-    .style('margin-right', '10px');
+    .style('margin-right', '10px')
+    .style('border', '1px solid black');
+
+  const g = svg.append('g');
 
   // Add the links to the svg element
-  const link = svg
+  const link = g
     .selectAll('.link')
     .data(links)
     .enter()
@@ -106,7 +109,7 @@ function render() {
     .style('stroke-width', '1px');
 
   // Add the nodes to the svg element
-  const node = svg
+  const node = g
     .selectAll('.node')
     .data(nodes)
     .enter()
@@ -136,6 +139,17 @@ function render() {
           }
         })
     );
+
+  // Create a zoom behaviour
+  const zoom = d3
+    .zoom()
+    .scaleExtent([0.5, 4])
+    .on('zoom', (event) => {
+      g.attr('transform', event.transform);
+    });
+
+  // Add the zoom behaviour to the svg element
+  svg.call(zoom);
 
   //Store the nodes
   allNodes.push(nodes);
