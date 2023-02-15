@@ -1,7 +1,29 @@
 let data;
 let simulations = [];
 let linkForces = [];
-let forceBodies = [];
+let bodyForces = [];
+let allNodes = [];
+
+//Clear all elements.
+function removeElements() {
+  d3.selectAll('svg').remove();
+  allNodes = [];
+  simulations.forEach((simulation, index) => {
+    simulation.stop();
+    simulation.nodes([]);
+    simulation.force('link', null);
+    simulation.force('charge', null);
+    simulation.force('center', null);
+    simulation.alphaTarget(0);
+    simulation.alphaDecay(0);
+    simulation.velocityDecay(0);
+    linkForces[index] = null;
+    bodyForces[index] = null;
+  });
+  linkForces = [];
+  bodyForces = [];
+  simulations = [];
+}
 
 function fetchData() {
   // Get all the checkbox elements with class "episode"
@@ -16,7 +38,6 @@ function fetchData() {
       .then((response) => response.json())
       .then((json) => {
         data = json;
-
         render();
       });
   };
@@ -35,8 +56,7 @@ function fetchData() {
 
       // Fetch and render data for all selected episodes
       if (selectedEpisodes.length > 0) {
-        console.log(selectedEpisodes);
-        d3.selectAll('svg').remove();
+        removeElements();
         selectedEpisodes.forEach((ep) => {
           fetchAndRenderData(
             `db/starwars-episode-${ep}-interactions-allCharacters.json`
@@ -44,22 +64,20 @@ function fetchData() {
         });
       } else {
         // If no episode is selected, fetch data for full interactions
-        d3.selectAll('svg').remove();
+        removeElements();
         fetchAndRenderData('db/starwars-full-interactions-allCharacters.json');
       }
     })
   );
 
-  // When staring the program we get here, fetch data for full interactions
+  // When starting the program we get here, fetch data for full interactions
   if (selectedEpisodes.length === 0) {
-    d3.selectAll('svg').remove();
+    removeElements();
     fetchAndRenderData('db/starwars-full-interactions-allCharacters.json');
   }
 }
 
 function render() {
-  console.log(data);
-
   // Get the nodes and links from the data
   const nodes = data.nodes;
   const links = data.links;
@@ -119,48 +137,63 @@ function render() {
         })
     );
 
-  //The labeling is problematic...
-  const label = svg
-    .selectAll('.label')
-    .data(nodes)
-    .enter()
-    .append('text')
-    .text((d) => d.name)
-    .attr('x', (d) => d.fx)
-    .attr('y', (d) => d.fy)
-    .style('font-size', '10px');
+  //Store the nodes
+  allNodes.push(nodes);
 
-  console.log(nodes);
+  //Used for highlighting linking nodes
+  linkingNodes = [];
+
+  //on hover event
   node.on('mouseover', (event, d) => {
     const infoBox = d3.select('#infoBox'); // Select the HTML element for the information box
     infoBox
       .html(`<p>Name: ${d.name}</p><p>Value: ${d.value}</p>`) // Update the contents with the name and value of d
       .style('visibility', 'visible'); // Make the information box visible
+
+    //Store nodes with the same name in different SVG:s.
+    linkingNodes = allNodes.flatMap((nodes) =>
+      nodes.filter((node) => node.name === d.name)
+    );
+
+    // Highlight the linking nodes by adjusting the size of the nodes.
+    d3.selectAll('circle')
+      .filter((node) => node.name === d.name)
+      .attr('r', (node) => (node.value + 15) / 10);
   });
 
+  //off hover event
   node.on('mouseout', (event, d) => {
     d3.select('#infoBox').style('visibility', 'hidden'); // Hide the information box
+    d3.select(event.target).attr('r', (d) => d.value / 10);
+
+    //Restore the size of all nodes and empty the linkingNodes array.
+    d3.selectAll('circle')
+      .filter((node) => node.name === d.name)
+      .attr('r', (node) => node.value / 10);
+    linkingNodes = [];
   });
 
   // Create a force simulation to determine the position of the nodes
   var linkForce = d3.forceLink(links).distance(20);
-  var forceBody = d3.forceManyBody().strength(-80);
+  var bodyForce = d3.forceManyBody().strength(-80);
 
   var simulation = d3
     .forceSimulation()
     .nodes(nodes)
-    .force('charge', forceBody)
+    .force('charge', bodyForce)
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('link', linkForce);
 
+  //Store the simulation, link forces and body forces
   simulations.push(simulation);
   linkForces.push(linkForce);
-  forceBodies.push(forceBody);
+  bodyForces.push(bodyForce);
 
   // Start the simulation
   simulation.nodes(nodes).on('tick', ticked);
   simulation.force('link').links(links);
 
+  //Slider to adjust the link distance
   d3.select('#linkSlider').on('input', function () {
     var distance = +this.value; // get the slider value as a number
     linkForces.forEach(function (linkForce) {
@@ -168,15 +201,15 @@ function render() {
     });
 
     simulations.forEach(function (simulation) {
-      console.log(simulations);
       simulation.alpha(1).restart(); // restart the simulation
     });
   });
 
+  //Slider to adjust the force strength
   d3.select('#forceSlider').on('input', function () {
     var force = +this.value; // get the slider value as a number
-    forceBodies.forEach(function (forceBody) {
-      forceBody.strength(force); // update the link distance
+    bodyForces.forEach(function (bodyForce) {
+      bodyForce.strength(force); // update the link distance
     });
 
     simulations.forEach(function (simulation) {
