@@ -10,23 +10,24 @@
 </head>
 
 <body>
+  <div class="container">
     <div class="controls">
         <div class="linkDistance">
           <label>
             Link distance
             <output id="linkSliderValue">20</output>
-            <input id="linkSlider" type="range" min="0" max="100" value="20" step="5" oninput="d3.select('#linkSliderValue').text(value)"></input>
+            <input  id="linkSlider" type="range" min="0" max="100" value="20" step="5" oninput="d3.select('#linkSliderValue').text(value)"></input>
           </label>
         </div>
         <div class="forceDistance">
             <label>
               Force Strength
               <output id="forceSliderValue">-80</output>
-              <input id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>
+              <input  id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>
             </label>
           </div>
     </div>
-    <div>
+    <div class ="forms">
         <form>
             <input type="checkbox" name="" id="1" value=1 class="episode">1</input>
             <input type="checkbox" name="" id="2" value=2 class="episode">2</input>
@@ -37,7 +38,9 @@
             <input type="checkbox" name="" id="7" value=7 class="episode">7</input>
         </form>
     </div>
+    <div class="svgContainer"></div>
     <div id="infoBox"></div>
+  </div>
     <script src="js/main.js"></script>
     <script src="js/fetchData.js"></script>
     <script src="js/script.js"></script>

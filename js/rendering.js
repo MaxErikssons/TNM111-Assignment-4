@@ -1,13 +1,16 @@
 //Create an SVG
 function createSvg(width, height) {
-  return d3
-    .select('body')
+  const svg = d3
+    .select('.svgContainer')
     .append('svg')
     .attr('width', width)
     .attr('height', height)
     .style('display', 'inline-block')
     .style('margin-right', '10px')
     .style('border', '1px solid black');
+    
+   
+    return svg;
 }
 
 //Add all links to the g element in the SVG
