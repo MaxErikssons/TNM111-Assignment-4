@@ -18,9 +18,21 @@ function render() {
 
   // Create a svg element to hold the diagram
   const svg = createSvg(width, height);
-  const g = svg.append('g');
 
-  // Add the links to the svg element
+  // Append a g element to the svg element
+  const diagram = svg.append('g');
+
+  // Append a h1 element to the diagram g element
+  diagram.append('h1')
+    .text('Diagram Title')
+    .attr('x', width / 2)
+    .attr('y', 20)
+    .attr('text-anchor', 'middle');
+
+  // Append a g element to the diagram g element to hold the links and nodes
+  const g = diagram.append('g');
+
+  // Add the links to the g element
   const link = addLinks(g, links);
 
   // Create a zoom behaviour
@@ -29,7 +41,7 @@ function render() {
   // Create a force simulation
   var simulation = createForceSimulation(nodes, links, width, height);
 
-  // Add the nodes to the svg element
+  // Add the nodes to the g element
   const node = addNodes(g, nodes, simulation);
 
   //Mouse node event
