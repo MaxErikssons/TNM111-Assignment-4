@@ -46,6 +46,9 @@ function render(episode) {
   node.on('mouseover', handleNodeMouseOver);
   node.on('mouseout', handleNodeMouseOut);
 
+  link.on('mouseover', handleNodeMouseOver);
+  link.on('mouseout', handleNodeMouseOut);
+
   // Start the simulation
   simulation.nodes(nodes).on('tick', ticked);
   simulation.force('link').links(links);

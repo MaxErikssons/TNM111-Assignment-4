@@ -14,17 +14,17 @@
     <div class="controls">
         <div class="linkDistance">
           <label class="labelInf">
-              Link distance
-              <output id="linkSliderValue">20</output>
+              Link distance 
           </label>
             <input  id="linkSlider" type="range" min="0" max="100" value="20" step="5" oninput="d3.select('#linkSliderValue').text(value)"></input>          
-        </div>
+            <output id="linkSliderValue">20</output>
+          </div>
         <div class="forceDistance">
              <label class="labelInf">
-               Force Strength
-              <output id="forceSliderValue">-80</output>
+               Force strength            
             </label>
-              <input  id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>            
+              <input  id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>        
+              <output id="forceSliderValue">-80</output>    
           </div>
     </div>
     <div class ="forms">

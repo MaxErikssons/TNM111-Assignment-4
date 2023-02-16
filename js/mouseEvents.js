@@ -1,8 +1,9 @@
 //Hover event on
 function handleNodeMouseOver(event, d) {
   const infoBox = d3.select('#infoBox');
+  const name = d.name ? `<p>Name: ${d.name}</p>` : '';
   infoBox
-    .html(`<p>Name: ${d.name}</p><p>Value: ${d.value}</p>`)
+    .html(`${name}<p>Interactions: ${d.value}</p>`)
     .style('visibility', 'visible');
 
   linkingNodes = allNodes.flatMap((nodes) =>
@@ -30,13 +31,8 @@ function handleNodeMouseOver(event, d) {
     topPos = windowHeight - infoBoxHeight;
   }
 
-  infoBox
-    .style('left', leftPos + 'px')
-    .style('top', topPos + 'px');
+  infoBox.style('left', leftPos + 'px').style('top', topPos + 'px');
 }
-
-
-
 
 //Hover event off
 function handleNodeMouseOut(event, d) {
