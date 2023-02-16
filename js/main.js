@@ -17,7 +17,7 @@ function render() {
   const height = 600;
 
   // Create a svg element to hold the diagram
-  const svg = createSvg(width, height,"en Titel");
+  const svg = createSvg(width, height);
   const g = svg.append('g');
 
   // Add the links to the svg element

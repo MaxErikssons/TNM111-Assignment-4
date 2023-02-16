@@ -13,18 +13,18 @@
   <div class="container">
     <div class="controls">
         <div class="linkDistance">
-          <label>
-            Link distance
-            <output id="linkSliderValue">20</output>
-            <input  id="linkSlider" type="range" min="0" max="100" value="20" step="5" oninput="d3.select('#linkSliderValue').text(value)"></input>
+          <label class="labelInf">
+              Link distance
+              <output id="linkSliderValue">20</output>
           </label>
+            <input  id="linkSlider" type="range" min="0" max="100" value="20" step="5" oninput="d3.select('#linkSliderValue').text(value)"></input>          
         </div>
         <div class="forceDistance">
-            <label>
-              Force Strength
+             <label class="labelInf">
+               Force Strength
               <output id="forceSliderValue">-80</output>
-              <input  id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>
             </label>
+              <input  id="forceSlider" type="range" min="-100" max="0" value="-80" step="10" oninput="d3.select('#forceSliderValue').text(value)"></input>            
           </div>
     </div>
     <div class ="forms">
@@ -42,8 +42,7 @@
     <div id="infoBox"></div>
   </div>
     <script src="js/main.js"></script>
-    <script src="js/fetchData.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/fetchData.js"></script>    
     <script src="js/mouseEvents.js"></script>
     <script src="js/sliders.js"></script>
     <script src="js/rendering.js"></script>
