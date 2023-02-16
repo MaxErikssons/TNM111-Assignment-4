@@ -12,7 +12,31 @@ function handleNodeMouseOver(event, d) {
   d3.selectAll('circle')
     .filter((node) => node.name === d.name)
     .attr('r', (node) => (node.value + 15) / 10);
+
+  const offsetX = 10; // Set this to the desired offset from the mouse pointer
+  const offsetY = 10; // Set this to the desired offset from the mouse pointer
+  const infoBoxWidth = infoBox.node().getBoundingClientRect().width;
+  const infoBoxHeight = infoBox.node().getBoundingClientRect().height;
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
+  let leftPos = event.pageX + offsetX;
+  if (leftPos + infoBoxWidth > windowWidth) {
+    leftPos = windowWidth - infoBoxWidth;
+  }
+
+  let topPos = event.pageY + offsetY;
+  if (topPos + infoBoxHeight > windowHeight) {
+    topPos = windowHeight - infoBoxHeight;
+  }
+
+  infoBox
+    .style('left', leftPos + 'px')
+    .style('top', topPos + 'px');
 }
+
+
+
 
 //Hover event off
 function handleNodeMouseOut(event, d) {
