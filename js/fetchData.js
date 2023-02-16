@@ -27,12 +27,12 @@ function fetchData() {
   let selectedEpisodes = [];
 
   // Function to fetch and render data for a given episode
-  const fetchAndRenderData = (url) => {
+  const fetchAndRenderData = (url, ep) => {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
         data = json;
-        render();
+        render(ep);
       });
   };
 
@@ -53,13 +53,17 @@ function fetchData() {
         removeElements();
         selectedEpisodes.forEach((ep) => {
           fetchAndRenderData(
-            `db/starwars-episode-${ep}-interactions-allCharacters.json`
+            `db/starwars-episode-${ep}-interactions-allCharacters.json`,
+            ep
           );
         });
       } else {
         // If no episode is selected, fetch data for full interactions
         removeElements();
-        fetchAndRenderData('db/starwars-full-interactions-allCharacters.json');
+        fetchAndRenderData(
+          'db/starwars-full-interactions-allCharacters.json',
+          'full'
+        );
       }
     })
   );
@@ -67,7 +71,10 @@ function fetchData() {
   // When starting the program we get here, fetch data for full interactions
   if (selectedEpisodes.length === 0) {
     removeElements();
-    fetchAndRenderData('db/starwars-full-interactions-allCharacters.json');
+    fetchAndRenderData(
+      'db/starwars-full-interactions-allCharacters.json',
+      'full'
+    );
   }
 }
 

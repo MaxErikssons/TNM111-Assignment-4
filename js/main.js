@@ -4,7 +4,7 @@ let linkForces = [];
 let bodyForces = [];
 let allNodes = [];
 
-function render() {
+function render(episode) {
   // Get the nodes and links from the data
   const nodes = data.nodes;
   const links = data.links;
@@ -19,18 +19,16 @@ function render() {
   // Create a svg element to hold the diagram
   const svg = createSvg(width, height);
 
-  // Append a g element to the svg element
-  const diagram = svg.append('g');
-
-  // Append a h1 element to the diagram g element
-  diagram.append('h1')
-    .text('Diagram Title')
+  // Add title to the svg element
+  svg
+    .append('text')
     .attr('x', width / 2)
     .attr('y', 20)
-    .attr('text-anchor', 'middle');
-
-  // Append a g element to the diagram g element to hold the links and nodes
-  const g = diagram.append('g');
+    .attr('text-anchor', 'middle')
+    .style('font-size', '16px')
+    .style('text-decoration', 'underline')
+    .text('Episode:' + episode);
+  const g = svg.append('g');
 
   // Add the links to the g element
   const link = addLinks(g, links);
