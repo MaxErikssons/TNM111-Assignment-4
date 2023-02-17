@@ -43,11 +43,11 @@ function render(episode) {
   const node = addNodes(g, nodes, simulation);
 
   //Mouse node event
-  node.on('mouseover', (event, d) => handleNodeMouseOver(event, d, g));
+  node.on('mouseover', handleNodeMouseOver);
   node.on('mouseout', handleNodeMouseOut);
 
-  link.on('mouseover', (event, d) => handleNodeMouseOver(event, d, g));
-  link.on('mouseout', handleNodeMouseOut);
+  link.on('mouseover', (event, d) => handleLinkMouseOver(event, d, g));
+  link.on('mouseout', (event, d) => handleLinkMouseOut(event, d, g));
 
   // Start the simulation
   simulation.nodes(nodes).on('tick', ticked);
