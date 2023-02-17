@@ -1,7 +1,10 @@
 //Hover event on
 function handleNodeMouseOver(event, d) {
   const infoBox = d3.select('#infoBox');
-  const name = d.name ? `<p>Name: ${d.name}</p>` : '';
+
+  const name = d.name
+    ? `<p>Name: ${d.name}</p>`
+    : `<p>Characters: ${d.source.name} & ${d.target.name}</p>`;
   infoBox
     .html(`${name}<p>Interactions: ${d.value}</p>`)
     .style('visibility', 'visible');
