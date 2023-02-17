@@ -17,6 +17,10 @@ function handleNodeMouseOver(event, d) {
     .filter((node) => node.name === d.name)
     .attr('r', (node) => (node.value + 15) / 10);
 
+  d3.selectAll('line')
+    .filter((link) => link.index === d.index)
+    .style('stroke', 'orange');
+
   const offsetX = 10; // Set this to the desired offset from the mouse pointer
   const offsetY = 10; // Set this to the desired offset from the mouse pointer
   const infoBoxWidth = infoBox.node().getBoundingClientRect().width;
@@ -45,6 +49,10 @@ function handleNodeMouseOut(event, d) {
   d3.selectAll('circle')
     .filter((node) => node.name === d.name)
     .attr('r', (node) => node.value / 10);
+
+  d3.selectAll('line')
+    .filter((link) => link.index === d.index)
+    .style('stroke', '#ededed');
 
   linkingNodes = [];
 }
