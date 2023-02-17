@@ -43,10 +43,10 @@ function render(episode) {
   const node = addNodes(g, nodes, simulation);
 
   //Mouse node event
-  node.on('mouseover', handleNodeMouseOver);
+  node.on('mouseover', (event, d) => handleNodeMouseOver(event, d, g));
   node.on('mouseout', handleNodeMouseOut);
 
-  link.on('mouseover', handleNodeMouseOver);
+  link.on('mouseover', (event, d) => handleNodeMouseOver(event, d, g));
   link.on('mouseout', handleNodeMouseOut);
 
   // Start the simulation

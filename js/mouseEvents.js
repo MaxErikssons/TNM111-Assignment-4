@@ -1,5 +1,5 @@
 //Hover event on
-function handleNodeMouseOver(event, d) {
+function handleNodeMouseOver(event, d, g) {
   const infoBox = d3.select('#infoBox');
 
   const name = d.name
@@ -17,7 +17,7 @@ function handleNodeMouseOver(event, d) {
     .filter((node) => node.name === d.name)
     .attr('r', (node) => (node.value + 15) / 10);
 
-  d3.selectAll('line')
+  g.selectAll('.link')
     .filter((link) => link.index === d.index)
     .style('stroke', 'orange');
 
